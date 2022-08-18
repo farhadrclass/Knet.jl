@@ -14,7 +14,8 @@ function getindex(x::CuArray{T}, i::AbstractArray{I}) where {T,I<:Real}
     return y
 end
 
-for F in (32,64); T=Symbol("Float$F"); @eval begin
+# for SR, we need to chage this
+for F in (16,32,64); T=Symbol("Float$F"); @eval begin 
 
 ## Indexing with CuArray{Int32}: low level, only Int32 supported, no bounds checking
 
