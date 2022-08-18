@@ -11,7 +11,7 @@ using Knet.LibKnet8: @knet8, unary_ops, unary_ops_with_int_degree
 function unary_op(f, j=f, o...)
     J=Symbol(j)
     M = which(@__MODULE__, J)
-    for S in (32,64)
+    for S in (16,32,64)
         T = Symbol("Float$S")
         F = "$(f)_$S"
         @eval begin
@@ -46,7 +46,7 @@ end
 function unary_op_with_int_degree(f, j=f, o...)
     J=Symbol(j)
     M = which(@__MODULE__, J)
-    for S in (32,64)
+    for S in (16,32,64)
         T = Symbol("Float$S")
         F = "$(f)_$S"
         @eval begin

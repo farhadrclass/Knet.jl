@@ -13,7 +13,7 @@ tanhback(dyi::T,yi::T) where {T<:Number} = dyi*(T(1)-yi*yi)
 @primitive tanhback(dy,y),ddx  ddx.*(1 .- y.*y)  ddx.*(-2 .* dy.*y)
 
 
-for (R,P) in ((KnetArray,Ptr), (CuArray,CuPtr)), T in (Float32,Float64); S = sizeof(T) * 8
+for (R,P) in ((KnetArray,Ptr), (CuArray,CuPtr)), T in (Float16,Float32,Float64); S = sizeof(T) * 8
     for f in ("elu","relu","selu","sigm")
         J, F = Symbol(f), "$(f)_$S"; M = which(@__MODULE__,J)
         @eval begin

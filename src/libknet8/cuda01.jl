@@ -5,7 +5,7 @@ fp = open("cuda01.cu","w")
 
 function cuda01src(f, j=f, ex="$f(xi,yi)"; BLK=256, THR=256)
   sprint() do s
-    for (T,F) in [("float","$(f)_32"),("double","$(f)_64")]
+    for (T,F) in [("half","$(f)_16"),("float","$(f)_32"),("double","$(f)_64")]
         print(s,
 """
 __global__ void _$(F)_01(int n, $T xi, $T *y, $T *z) {

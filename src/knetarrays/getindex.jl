@@ -159,7 +159,7 @@ function getindex(A::KnetArray{T}, I::AbstractUnitRange) where {T}
 end
 
 # Efficient fill:
-for S in (32,64); T = Symbol("Float$S"); F = "fill_$S"
+for S in (16,32,64); T = Symbol("Float$S"); F = "fill_$S"
     @eval function unsafe_setindex!(a::KnetArray{$T},v::$T,I::AbstractUnitRange)
         @knet8($F,(Cint,$T,Ptr{$T}),length(I),v,pointer(a,first(I)))
         return a
@@ -210,7 +210,7 @@ function setindex!(A::KnetArray{T}, v, I::Colon) where {T}
     return A
 end
 
-for F in (32,64); T=Symbol("Float$F"); @eval begin
+for F in (16,32,64); T=Symbol("Float$F"); @eval begin
 
 ## Indexing with KnetArray{Int32}: low level, only Int32 supported, no bounds checking
 
@@ -672,6 +672,8 @@ function setindex2!(A::KnetMatrix{T}, B, I1::Index3, I2::Index3) where {T}
                     @knet8(fill_32,(Cint,Cfloat, Ptr{Cfloat}), nelts,B,aptr0)
                 elseif T<: Float64
                     @knet8(fill_64,(Cint,Cdouble,Ptr{Cdouble}),nelts,B,aptr0)
+                elseif T<: Float16
+                    @knet8(fill_16,(Cint,Cdouble,Ptr{Cdouble}),nelts,B,aptr0)
                 else
                     error("$T not supported")
                 end
@@ -681,6 +683,8 @@ function setindex2!(A::KnetMatrix{T}, B, I1::Index3, I2::Index3) where {T}
                 @knet8(xfill_32,(Cint,Cint,Cfloat, Ptr{Cfloat}, Cint),nrows,ncols,B,aptr0,astep)
             elseif T<: Float64
                 @knet8(xfill_64,(Cint,Cint,Cdouble,Ptr{Cdouble},Cint),nrows,ncols,B,aptr0,astep)
+            elseif T<: Float16
+                @knet8(xfill_16,(Cint,Cint,Cdouble,Ptr{Cdouble},Cint),nrows,ncols,B,aptr0,astep)                
             else
                 error("$T not supported")
             end

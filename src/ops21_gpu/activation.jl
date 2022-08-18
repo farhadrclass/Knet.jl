@@ -7,7 +7,7 @@ using CUDA: CUDA, CuArray, CuPtr
 using Knet.LibKnet8: @knet8
 
 
-for (A,P) in ((KnetArray,Ptr), (CuArray,CuPtr)), T in (Float32,Float64); S = sizeof(T) * 8
+for (A,P) in ((KnetArray,Ptr), (CuArray,CuPtr)), T in (Float16,Float32,Float64); S = sizeof(T) * 8
     for f in ("elu", "gelu", "hardsigmoid", "hardswish", "selu", "sigm", "swish", "tanh_")
         J, Jback = Symbol(f), Symbol("$(f)back")
         M, Mback = which(@__MODULE__,J), which(@__MODULE__,Jback)

@@ -2,7 +2,7 @@ fp = open("relu.cu","w")
 
 function relusrc(; BLK=256, THR=256)
   sprint() do s
-    for (T,F,Fback) in [("float","relu_32_1","reluback_32_1"),("double","relu_64_1","reluback_64_1")]
+    for (T,F,Fback) in [("half","relu_16_1","reluback_16_1"), ("float","relu_32_1","reluback_32_1"),("double","relu_64_1","reluback_64_1")]
         print(s,
 """
 __global__ void _$(F)(int n, $T max_value, $T negative_slope, $T threshold, $T *x_, $T *y_) {

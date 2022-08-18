@@ -168,6 +168,9 @@ function conv4_algo(w::R, x::R, y::R; handle=CUDNN.handle(), o...) where {T,R<:D
         wd, xd, yd, cd = FD(w), TD(x), TD(y), CD(w,x;o...)
         CUDNN.cudnnFindConvolutionForwardAlgorithmEx(handle,xd,x,wd,w,cd,yd,y,requestedAlgoCount,returnedAlgoCount,perfResults,workSpace,bytes(workSpace))
         p = perfChoose(perfResults, returnedAlgoCount[1])
+        #hard code
+        #TODO fix it 
+        p = nothing
         conv4_algos[key] = p
         if p === nothing
             @warn "No good algo found for conv4$o: using default algo=0." maxlog=1
@@ -193,6 +196,7 @@ function conv4w_algo(w::R,x::R,dy::R,dw::R; handle=CUDNN.handle(), o...) where {
         wd, xd, yd, cd = FD(dw), TD(x), TD(dy), CD(w,x;o...)
         CUDNN.cudnnFindConvolutionBackwardFilterAlgorithmEx(handle,xd,x,yd,dy,cd,wd,dw,requestedAlgoCount,returnedAlgoCount,perfResults,workSpace,bytes(workSpace))
         p = perfChoose(perfResults, returnedAlgoCount[1])
+        p = nothing  #TODO fix this
         conv4w_algos[key] = p
         if p === nothing
             @warn "No good algo found for conv4w$o: using default algo=0." maxlog=1
@@ -218,6 +222,7 @@ function conv4x_algo(w::R,x::R,dy::R,dx::R; handle=CUDNN.handle(), o...) where {
         wd, xd, yd, cd = FD(w), TD(dx), TD(dy), CD(w,x;o...)
         CUDNN.cudnnFindConvolutionBackwardDataAlgorithmEx(handle,wd,w,yd,dy,cd,xd,dx,requestedAlgoCount,returnedAlgoCount,perfResults,workSpace,bytes(workSpace))
         p = perfChoose(perfResults, returnedAlgoCount[1])
+        p = nothing #todo fix this
         conv4x_algos[key] = p
         if p === nothing
             @warn "No good algo found for conv4x$o: using default algo=0." maxlog=1

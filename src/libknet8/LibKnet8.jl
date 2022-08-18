@@ -49,7 +49,7 @@ end
 # macro nvml(fun, argtypes, argvalues...); :(@cudacall("nvml",$fun,UInt32,$argtypes,$argvalues)); end
 
 macro knet8(fun, argtypes, argvalues...)
-    fun = "$(fun)_stream"
+    fun = "$(fun)_stream" 
     push!(argtypes.args, :(CUDA.cudaStream_t))
     argvalues = (argvalues..., :(CUDA.stream()))
     :(@cudacall("knet8",$fun,Nothing,$argtypes,$argvalues,false))

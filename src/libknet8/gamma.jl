@@ -2,7 +2,7 @@
 # Acknowledgement:
 # This file is adapted from codes in https://github.com/rachtsingh/lgamma/blob/master/src/internals.c,
 # which is again ported from https://bitbucket.org/eigen/eigen/overview.
-
+# from https://docs.nvidia.com/cuda/cuda-math-api/group__CUDA__MATH____HALF__MISC.html#group__CUDA__MATH____HALF__MISC
 function cuda1gammafamily()
     sprint() do s
         print(s,
@@ -10,7 +10,16 @@ function cuda1gammafamily()
 #define _USE_MATH_DEFINES
 #include <float.h>
 #include <math.h>
+#include <cuda_fp16.h>
 
+__device__ __host__ __half polynomial_evaluation_16(float x, const float *f, int n) {
+  __half result = 0.0;
+  for (int i = 0; i < n; i++) {
+    result *= x;
+    result += f[i];
+  }
+  return result;
+}
 __device__ __host__ float polynomial_evaluation_32(float x, const float *f, int n) {
   float result = 0.0;
   for (int i = 0; i < n; i++) {
@@ -27,6 +36,19 @@ __device__ __host__ double polynomial_evaluation_64(double x, const double *f, i
     result += f[i];
   }
   return result;
+}
+
+
+__device__ __host__ __half digamma_impl_maybe_poly_16(const __half s) {
+  const __half A[] = {-4.1667E-3f, 3.9687E-3f,
+                     -8.3333E-3f, 8.3333E-2f};
+  __half z;
+  if (s < __double2half(1.0e4)) {
+    z = __double2half(1.0) / (s * s);
+    return z * polynomial_evaluation_16(z, A, 4);
+  } else {
+    return 0.0;
+  }
 }
 
 __device__ __host__ float digamma_impl_maybe_poly_32(const float s) {
@@ -56,7 +78,7 @@ __device__ __host__ double digamma_impl_maybe_poly_64(const double s) {
 }
 """)
 
-for (T,F) in [("float","32"),("double","64")]
+for (T,F) in [("half","16"),("float","32"),("double","64")]
 
 floor_str = (T == "float") ? "floorf" : "floor"
 tan_str = (T == "float") ? "tanf" : "tan"

@@ -5,7 +5,7 @@ using AutoGrad: AutoGrad, @primitive1
 
 # op(A) m × k , op(B) k × n and C m × n; lda, ldb, ldc leading dimensions
 
-for (T,F) in ((Float32,cublasSgemm_v2), (Float64,cublasDgemm_v2)); @eval begin
+for (T,F) in ((Float16,cublasSgemm_v2),(Float32,cublasSgemm_v2), (Float64,cublasDgemm_v2)); @eval begin
 
     function linear(A::DevArray{$T}, B::DevArray{$T}; dims=1)
         @assert ndims(A) > dims "ndims(A) must be > dims"

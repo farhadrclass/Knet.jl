@@ -30,7 +30,7 @@ reduced_dims_compat(dims,region)=map(last, Base.reduced_indices(map(Base.OneTo, 
 function reduction_op_cuarray(f, j=f, o...)
     J=Symbol(j)
     M = which(@__MODULE__, J)
-    for S in (32,64)
+    for S in (16,32,64)
         T = Symbol("Float$S")
         F20 = "$(f)_$(S)_20"
         F21 = "$(f)_$(S)_21"

@@ -37,7 +37,7 @@ fp = open("cuda13.cu","w")
 function cuda13src(f, j=f, ex="$f(xi,yi)")
   sprint() do s
     print(s,"#define BLOCK_SIZE_x 32\n#define BLOCK_SIZE_y 32\n#define half_BLOCK_SIZE_y 16\n")
-    for (T,F) in [("float","$(f)_32"),("double","$(f)_64")]
+    for (T,F) in [("half","$(f)_16"),("float","$(f)_32"),("double","$(f)_64")]
         print(s,
 
 """
@@ -111,7 +111,7 @@ extern "C" {
 }
 """)
     end
-    for (T,F) in [("float","$(f)_32"),("double","$(f)_64")]
+    for (T,F) in [("half","$(f)_16"),("float","$(f)_32"),("double","$(f)_64")]
         print(s,
 
 """

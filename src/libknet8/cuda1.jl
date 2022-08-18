@@ -12,7 +12,7 @@ print(fp,cuda1gammafamily())
 
 function cuda1src(f, j=f, ex="$f(xi)"; seperate_impl=false, BLK=256, THR=256)
     sprint() do s
-        for (T,F) in [("float","$(f)_32"),("double","$(f)_64")]
+        for (T,F) in [("half","$(f)_16"),("float","$(f)_32"),("double","$(f)_64")]
             seperate_impl && (ex = "$F(xi)")
             print(s,
 """
@@ -48,7 +48,7 @@ end
 
 function cuda1src_with_int_degree(f, j=f, ex="$f(d,xi)"; BLK=256, THR=256)
     sprint() do s
-        for (T,F) in [("float","$(f)_32"),("double","$(f)_64")]
+        for (T,F) in [("half","$(f)_16"),("float","$(f)_32"),("double","$(f)_64")]
             print(s,
 """
 __global__ void _$F(int n, int d, $T *x, $T *y) {
@@ -81,7 +81,7 @@ end
 
 function cuda1fill(; BLK=256, THR=256)
     sprint() do s
-        for (T,F) in [("float","32"),("double","64")]
+        for (T,F) in [("half","16"),("float","32"),("double","64")]
             print(s,
 """
 __global__ void _fill_$F(int n, $T x, $T *y) {
@@ -108,7 +108,7 @@ print(fp,cuda1fill())
 
 function cuda1xfill(; BLK=256, THR=256)
     sprint() do s
-        for (T,F) in [("float","32"),("double","64")]
+        for (T,F) in [("half","16"),("float","32"),("double","64")]
             print(s,
 """
 __global__ void _xfill_$F(int nrows, int ncols, $T x, $T *y, int incy) {
@@ -169,7 +169,7 @@ print(fp,cuda1xcopy())
 
 function cuda1icat(; BLK=256, THR=256)
     sprint() do s
-        for (T,F) in [("float","32"),("double","64")]
+        for (T,F) in [("half","16"),("float","32"),("double","64")]
             print(s,
 """
 __global__ void _icat_$F(int nrows, int ncols, $T **x, $T *y) {
@@ -240,7 +240,7 @@ static __inline__ __device__ double atomicAdd2(double *address, double val) {
 
 function cuda1getcols(; BLK=256, THR=256)
     sprint() do s
-        for (T,F) in [("float","32"),("double","64")]
+        for (T,F) in [("half","16"),("float","32"),("double","64")]
             print(s,
 """
 __global__ void _getcols_$F(int xrows, int xcols, int ncols, int *cols, $T *x, $T *y) {
@@ -453,7 +453,7 @@ print(fp,cuda1getcols())
 
 function cuda1dropout(; BLK=256, THR=256)
     sprint() do s
-        for (T,F) in [("float","32"),("double","64")]
+        for (T,F) in [("half","16"),("float","32"),("double","64")]
             print(s,
 """
 __global__ void _dropout_$F(int n, $T p, $T q, $T *x, $T *y) {
@@ -503,7 +503,7 @@ print(fp,cuda1dropout())
 # Tested for 25 arrays of 200
 function cuda1concat(; BLK=256, THR=256)
     sprint() do s
-        for (T,F) in [("float","32"),("double","64")]
+        for (T,F) in [("half","16"),("float","32"),("double","64")]
             print(s,
 """
 __global__ void _concat_$F(int narrays, int *starts, int *lengths, $T **x, $T *y) {

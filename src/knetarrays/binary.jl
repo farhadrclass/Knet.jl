@@ -13,7 +13,7 @@ using Knet.LibKnet8: @knet8, binary_ops
 function binary_op(f, j=f, o...)
     J=Symbol(j)
     M = which(@__MODULE__, J)
-    for S in (32,64)
+    for S in (16,32,64)
         T = Symbol("Float$S")
 
         F01 = "$(f)_$(S)_01" # Scalar,Array->Array

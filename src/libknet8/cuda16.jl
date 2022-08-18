@@ -6,7 +6,7 @@ function cuda16src(f, j=f, ex="$f(xi,yi)")
   sprint() do s
     # it can handle arrays with 3 to 5 dimensions
     for dim_count=3:5
-      for (T,F) in [("float","$(f)_32"),("double","$(f)_64")]
+      for (T,F) in [("half","$(f)_16"),("float","$(f)_32"),("double","$(f)_64")]
           print(s,"__global__ void _$(F)_16_$(dim_count)($T *x,$T *y, $T *z,")
           # place input variables
           for counter=0:dim_count-1

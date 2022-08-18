@@ -46,6 +46,8 @@ function bmm!(transA::AbstractChar, transB::AbstractChar, alpha::Number, A::R, B
         cublasDgemmStridedBatched(CUBLAS.handle(), transa, transb, m, n, k, alpha, A, lda, strideA, B, ldb, strideB, beta, C, ldc, strideC, bs)
     elseif T<:Float32
         cublasSgemmStridedBatched(CUBLAS.handle(), transa, transb, m, n, k, alpha, A, lda, strideA, B, ldb, strideB, beta, C, ldc, strideC, bs)
+    elseif T<:Float16 # TODO this is not tested
+        cublasSgemmStridedBatched(CUBLAS.handle(), transa, transb, m, n, k, alpha, A, lda, strideA, B, ldb, strideB, beta, C, ldc, strideC, bs)
     else
         error("cublasXgemmStridedBatched does not support $T")
     end

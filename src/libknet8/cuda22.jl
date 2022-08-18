@@ -5,7 +5,7 @@ fp = open("cuda22.cu","w")
 
 function cuda22src(f, j, op, f1, v0; BLK=128, THR=128) # BLK not used, determined by ny
     sprint() do s
-        for (T,F) in [("float","$(f)_32"),("double","$(f)_64")]
+        for (T,F) in [("half","$(f)_16"),("float","$(f)_32"),("double","$(f)_64")]
             print(s,
 """
 __device__ void _$(F)_22_0(volatile $T *x, int i) {

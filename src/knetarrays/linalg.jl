@@ -46,8 +46,8 @@ function gemm!(transA::AbstractChar, transB::AbstractChar, alpha::Number, A::Kne
     elseif T<:Float32
         # @cublas(cublasSgemm_v2, (Cptr, UInt32, UInt32, Cint, Cint, Cint, Ptr{T}, Ptr{T}, Cint, Ptr{T}, Cint, Ptr{T}, Ptr{T}, Cint), cublashandle(), transa, transb, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc)
         CUBLAS.cublasSgemm_v2(CUBLAS.handle(), transa, transb, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc)
-    # elseif T<:Float16
-    #     @cublas(cublasHgemm, (Cptr, UInt32, UInt32, Cint, Cint, Cint, Ptr{T}, Ptr{T}, Cint, Ptr{T}, Cint, Ptr{T}, Ptr{T}, Cint), cublashandle(), transa, transb, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc)
+    elseif T<:Float16 #TODO this is a problem
+        @cublas(cublasHgemm, (Cptr, UInt32, UInt32, Cint, Cint, Cint, Ptr{T}, Ptr{T}, Cint, Ptr{T}, Cint, Ptr{T}, Ptr{T}, Cint), cublashandle(), transa, transb, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc)
     else
         error("CUBLAS does not support $T")
     end

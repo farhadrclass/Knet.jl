@@ -18,7 +18,7 @@ fp = open("cuda17.cu","w")
 function cuda17src(f, j=f, ex="$f(xi,yi)")
   sprint() do s
 
-    for (T,F) in [("float","$(f)_32"),("double","$(f)_64")]
+    for (T,F) in [("half","$(f)_16"),("float","$(f)_32"),("double","$(f)_64")]
         print(s,
 
 """
